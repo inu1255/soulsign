@@ -1,1 +1,5 @@
 cert/.cache
+log/
+node_modules/
+package-lock.json
+soulsign.sql
