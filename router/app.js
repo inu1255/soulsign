@@ -47,8 +47,9 @@ exports.run = function(req, res) {
 exports.set = function(req, res) {
     let body = req.body;
     let user = req.session.user;
-    let { aid, ...data } = body;
-    return db.update("up", data).where({ aid, uid: user.id });
+    let aid = body.aid;
+    delete body.aid;
+    return db.update("up", body).where({ aid, uid: user.id });
 };
 
 function taskLoop() {
