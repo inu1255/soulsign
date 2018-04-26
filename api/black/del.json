@@ -1,0 +1,19 @@
+{
+    "name": "删除域名黑名单",
+    "method": "GET",
+    "params": {
+        "id": {
+            "rem": "id",
+            "need": true
+        }
+    },
+    "grant": {
+        "$U": "需要登录"
+    },
+    "error": {},
+    "ret": {
+        "no": 200,
+        "msg": "",
+        "data": {}
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "name": "编辑脚本",
+    "method": "POST",
+    "params": {
+        "aid": {
+            "rem": "脚本id",
+            "need": true
+        },
+        "enable": {
+            "rem": "是否启用"
+        }
+    },
+    "grant": {
+        "$U": "需要登录"
+    },
+    "error": {
+        "404": "脚本不存在"
+    },
+    "ret": {
+        "no": 200,
+        "msg": "",
+        "data": {
+            "port": 13876
+        }
+    }
+}

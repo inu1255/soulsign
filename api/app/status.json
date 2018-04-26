@@ -1,0 +1,17 @@
+{
+    "name": "请求代理",
+    "method": "GET",
+    "params": {},
+    // "grant": {
+    //     "$U.role=='admin'": "需要管理员权限"
+    // },
+    "error": {
+    },
+    "ret": {
+        "no": 200,
+        "msg": "",
+        "data": {
+            "port": 13876
+        }
+    }
+}

@@ -1,0 +1,28 @@
+{
+    "name": "修改域名黑名单",
+    "method": "POST",
+    "params": {
+        "id": {
+            "rem": "id",
+            "need": true
+        },
+        "title": {
+            "rem": "标题"
+        },
+        "domains": {
+            "rem": "域名"
+        },
+        "all_proxy": {
+            "rem": "黑/白名单"
+        }
+    },
+    "grant": {
+        "$U": "需要登录"
+    },
+    "error": {},
+    "ret": {
+        "no": 200,
+        "msg": "",
+        "data": {}
+    }
+}

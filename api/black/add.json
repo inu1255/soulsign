@@ -1,0 +1,27 @@
+{
+    "name": "添加域名黑名单",
+    "method": "POST",
+    "params": {
+        "title": {
+            "rem": "标题",
+            "need": true
+        },
+        "domains": {
+            "rem": "域名",
+            "need": true
+        },
+        "all_proxy": {
+            "rem": "黑/白名单",
+            "need": true
+        }
+    },
+    "grant": {
+        "$U": "需要登录"
+    },
+    "error": {},
+    "ret": {
+        "no": 200,
+        "msg": "",
+        "data": {}
+    }
+}
