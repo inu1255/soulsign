@@ -3,7 +3,7 @@
  * Author: inu1255
  * E-Mail: 929909260@qq.com
  */
-const appname = "automan";
+const appname = "soulsign";
 
 module.exports = {
     appname,

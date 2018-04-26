@@ -22,6 +22,7 @@ exports.del = function(req, res) {
 exports.set = function(req, res) {
     let body = req.body;
     let user = req.session.user;
-    let { id, ...data } = body;
-    return db.update("black_list", data).where({ id, uid: user.id });
+    let id = body.id;
+    delete body.id;
+    return db.update("black_list", body).where({ id, uid: user.id });
 };

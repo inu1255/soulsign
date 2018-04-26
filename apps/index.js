@@ -14,7 +14,6 @@ cofs.readDir('./apps/').then(function(filenames) {
             }
         }
     }
-    console.log(store);
 });
 
 module.exports = store;
