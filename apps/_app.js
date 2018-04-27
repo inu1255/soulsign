@@ -4,17 +4,6 @@ const ws = require("../common/server/ws");
 const logger = require("../common/log");
 const utils = require("../common/utils");
 
-class Param {
-    constructor(lbl) {
-        if (lbl.lbl) {
-            this.lbl = lbl.lbl;
-            if (lbl.reg) this.reg = lbl.reg;
-        } else {
-            this.lbl = lbl;
-        }
-    }
-}
-
 class App {
     constructor() {
         this.r = new Request();
@@ -69,7 +58,7 @@ class App {
         }
     }
     ok(data) {
-        this.log.info("获得数据", data);
+        this.log.info("获得数据", data instanceof Buffer ? data.toString("base64") : data);
         return true;
     }
     async run(params) {
@@ -105,7 +94,7 @@ class App {
             return false;
         }).then(ok => {
             let t = new Date().getTime();
-            if (ok) return db.update("up", { update_at: t, success_at: t, num: db.Raw("num+1") }).where({ aid: this.id, uid: uid }).then(() => ok);
+            if (ok) return db.update("up", { update_at: t, success_at: t, num: db.Raw("num+1"), online: 5 }).where({ aid: this.id, uid: uid }).then(() => ok);
             return db.update("up", { update_at: t, failure_at: t, online: db.Raw("online-2") }).where({ aid: this.id, uid: uid }).then(() => false);
         }, err => {
             let t = new Date().getTime();

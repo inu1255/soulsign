@@ -40,12 +40,12 @@ class JdDou extends App {
     sign(params) {
         return this.r.postForm("http://api.m.jd.com/client.action?" + params.sign, { body: '{"rnVersion":"3.3"}' }, {
             cookie: params.cookie,
-        }).then(data => this.ok(data));
+        });
     }
     card(params) {
         return this.r.postForm("http://api.m.jd.com/client.action?" + params.card, { body: '{"index":2}' }, {
             cookie: params.cookie,
-        }).then(data => this.ok(data));
+        });
     }
     run(params) {
         if (params.sign && params.card) return this.sign(params).then(x => this.card(params));

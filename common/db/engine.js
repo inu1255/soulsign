@@ -249,6 +249,29 @@ class Sql extends Raw {
     first() {
         if (!this._limit) this._limit = " limit 1";
         this._first = true;
+        this.then(function(rows) {
+            return rows instanceof Array ? rows[0] : rows;
+        });
+        return this;
+    }
+    exclude(keys) {
+        keys = utils.arr(keys);
+        if (keys.length) {
+            this.then(function(rows) {
+                if (rows instanceof Array) {
+                    for (let row of rows) {
+                        for (let key of keys) {
+                            delete row[key];
+                        }
+                    }
+                } else if (typeof rows === "object") {
+                    for (let key of keys) {
+                        delete rows[key];
+                    }
+                }
+                return rows;
+            });
+        }
         return this;
     }
     /**
@@ -295,15 +318,15 @@ class SelectSql extends Sql {
         this._sql = `select count(${key||"*"}) as count from `;
         this._first = true;
         return this;
-	}
-	/**
-	 * @param {Array} keys 
-	 */
-	select(keys){
+    }
+    /**
+     * @param {Array} keys 
+     */
+    select(keys) {
         keys = utils.arr(keys, ["*"]);
-		this._sql = `select ${keys.join(",")} from `;
-		return this;
-	}
+        this._sql = `select ${keys.join(",")} from `;
+        return this;
+    }
 }
 
 class UpdateSql extends Sql {
@@ -385,14 +408,6 @@ class InsertOrUpdate extends Sql {
         return super.then(onfulfilled, onrejected);
     }
 }
-
-Promise.prototype.first = function() {
-    return new Promise((resolve, reject) => {
-        this.then(function(rows) {
-            rows instanceof Array ? resolve(rows[0]) : resolve(rows);
-        }, reject);
-    });
-};
 
 class Engine {
     constructor() {
