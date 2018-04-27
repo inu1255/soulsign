@@ -61,7 +61,7 @@ class App {
             method: req.method,
             url: req.url,
             headers: req.headers,
-            body: req.body.toString(),
+            body: req.body.toString("base64"),
         };
         if (await this.is_online(params)) {
             this.success(uid, params);
@@ -73,7 +73,7 @@ class App {
         return true;
     }
     async run(params) {
-        return this.r.request(params.url, params.body, params.method, params.headers);
+        return this.r.request(params.url, new Buffer(params.body, "base64"), params.method, params.headers);
     }
     // getImageCode  获取图像验证码，返回图像地址
     async login(params) {

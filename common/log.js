@@ -11,50 +11,51 @@ log4js.configure({
     appenders: {
         app: {
             type: 'dateFile',
-            daysToKeep: 15,
+            daysToKeep: 7,
             keepFileExt: true,
             filename: `./log/${config.appname}.log`
         },
         console: { type: 'stdout' },
         access: {
             type: 'dateFile',
-            daysToKeep: 15,
+            daysToKeep: 7,
             keepFileExt: true,
             filename: `./log/access.log`
         },
         db: {
             type: 'dateFile',
-            daysToKeep: 15,
+            daysToKeep: 7,
             keepFileExt: true,
             filename: `./log/db.log`
+        },
+        dev: {
+            type: 'dateFile',
+            daysToKeep: 7,
+            keepFileExt: true,
+            filename: `./log/dev.log`
         }
     },
     categories: {
         default: {
-            appenders: ["console"],
-            level: 'debug'
-        },
-        [config.appname]: {
             appenders: ["app", "console"],
-            level: 'info'
+            level: 'debug'
         },
         db: {
             appenders: ["db", "console"],
             level: 'debug'
         },
         access: {
-            appenders: ["access"],
+            appenders: ["access", "console"],
             level: 'info'
         },
         dev: {
-            appenders: ["console"],
+            appenders: ["dev", "console"],
             level: 'debug'
         }
     }
 });
 
-exports.logger = log4js.getLogger(config.appname);
 exports.getLogger = function(name) {
     return log4js.getLogger(name);
 };
-exports.connectLogger = log4js.connectLogger(exports.logger, { level: log4js.levels.INFO, format: ':method :url' });
+exports.connectLogger = log4js.connectLogger(log4js.getLogger('access'), { level: log4js.levels.INFO, format: '[:method :url :response-timems :remote-addr :user-agent]' });

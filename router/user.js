@@ -68,7 +68,10 @@ exports.logout = function(req, res) {
 
 function checkCode(title, code) {
     return co(function*() {
-        const one = yield db.select("verify").where("title", title).first();
+		const one = yield db.select("verify").where("title", title).first();
+		if (!one) {
+			return 407;
+		}
         // 尝试次数过多
         if (one.rest < 1) {
             return 407;
@@ -106,10 +109,10 @@ exports.register = function(req, res) {
             // 账号已经存在 408
             return 408;
         }
-        const errNo = yield checkCode(body.title, body.code);
-        if (errNo) {
-            return errNo;
-        }
+        // const errNo = yield checkCode(body.title, body.code);
+        // if (errNo) {
+        //     return errNo;
+        // }
         if (/^1\d{10}$/.test(body.title)) {
             // 手机注册
             body.telphone = body.title;

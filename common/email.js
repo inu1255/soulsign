@@ -5,7 +5,7 @@
  * E-Mail: 929909260@qq.com
  */
 const nodemailer = require('nodemailer');
-const logger = require("./log").logger;
+const logger = require("./log").getLogger("dev");
 const config = require("./config");
 
 const transporter = nodemailer.createTransport({

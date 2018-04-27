@@ -1,5 +1,5 @@
 "use strict";
-const log = require("../log");
+const log = require("../log").getLogger("db");
 const utils = require("../utils");
 
 /**
@@ -396,7 +396,7 @@ Promise.prototype.first = function() {
 
 class Engine {
     constructor() {
-        this.log = log.getLogger(this.name);
+        this.log = log;
     }
 
     get name() {

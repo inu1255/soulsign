@@ -12,6 +12,9 @@ class NeteaseMusic extends App {
             return await super.check(uid, req, res);
         }
     }
+	ok(data){
+		return Boolean(data);
+	}
 }
 
 module.exports = NeteaseMusic;

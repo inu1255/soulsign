@@ -9,7 +9,7 @@ const router = express.Router();
 const fs = require("fs");
 const co = require("co");
 const path = require("path");
-const logger = require("../common/log").logger;
+const logger = require("../common/log").getLogger("dev");
 const config = require("../common/config");
 
 const apiDir = config.apiDir;
