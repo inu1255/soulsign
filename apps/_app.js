@@ -45,7 +45,7 @@ class App {
         }
     }
     async check(uid, req, res) {
-        req.body = await utils.streamToBuffer(req);
+        try { req.body = req.body || await utils.streamToBuffer(req); } catch (err) {}
         let params = {
             method: req.method,
             url: req.url,

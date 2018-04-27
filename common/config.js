@@ -5,7 +5,7 @@
  */
 const appname = "soulsign";
 
-module.exports = {
+const config = {
     appname,
     title: "自动化",
     apiDir: "api",
@@ -15,9 +15,9 @@ module.exports = {
         port: 3306,
         user: 'root',
         password: '199337',
-        database: appname,		 
-        connectionLimit: 50,		 
-        supportBigNumbers: true,		 
+        database: appname,
+        connectionLimit: 50,
+        supportBigNumbers: true,
         bigNumberStrings: false
     },
     dev: process.argv.indexOf("--dev") >= 0,
@@ -36,3 +36,12 @@ function getPort(port) {
     }
     return port;
 }
+
+try {
+    require("./_config.js")(config);
+    console.log("使用_config配置");
+} catch (error) {
+
+}
+
+module.exports = config;

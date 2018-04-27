@@ -16,7 +16,8 @@ exports.list = function(req, res) {
 
 exports.mines = function(req, res) {
     let user = req.session.user;
-    return db.select("up").where({ uid: user.id }).exclude(["params"]);
+    let selects = ["aid", "uid", "enable", "num", "online", "online_at", "login_at", "update_at", "success_at", "failure_at", "create_at"];
+    return db.select("up", selects).where({ uid: user.id });
 };
 
 exports.proxy = async function(req, res) {

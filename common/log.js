@@ -58,4 +58,4 @@ log4js.configure({
 exports.getLogger = function(name) {
     return log4js.getLogger(name);
 };
-exports.connectLogger = log4js.connectLogger(log4js.getLogger('access'), { level: log4js.levels.INFO, format: '[:method :url :response-timems :remote-addr :user-agent]' });
+exports.connectLogger = log4js.connectLogger(log4js.getLogger('access'), { level: log4js.levels.INFO, format: '[:response-timems :method :url\t\t :remote-addr]' });

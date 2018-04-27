@@ -383,12 +383,24 @@ class InsertOrUpdate extends Sql {
         this.from(table);
         this._data = data;
     }
+    toInsert() {
+        return new InsertSql(this._table, this._data).engine(this._e);
+    }
+    toUpdate() {
+        let data = {};
+        let where = this._where.toString();
+        for (let k in this._data) {
+            if (where.indexOf(`${k}=?`) < 0)
+                data[k] = this._data[k];
+        }
+        return new UpdateSql(this._table, data).engine(this._e).where(this._where);
+    }
     pms() {
         if (this._where.isEmpty())
             return super.pms();
         return new Promise((resolve, reject) => {
-            new SelectSql(this._table).where(this._where).first().engine(this._e).then((row) => {
-                let hander = row ? new UpdateSql(this._table, this._data).where(this._where).engine(this._e) : new InsertSql(this._table, this._data).engine(this._e);
+            new SelectSql(this._table).engine(this._e).where(this._where).first().then((row) => {
+                let hander = row ? this.toUpdate() : this.toInsert();
                 if (this._id) hander.id(row && row.id);
                 hander.then(resolve, reject);
             }, reject);
