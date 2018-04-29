@@ -8,7 +8,7 @@ class NeteaseMusic extends App {
         this.package = "com.netease.cloudmusic";
     }
     async check(uid, req, res) {
-        if (req.url.indexOf('eapi/point/dailyTask') >= 0) {
+        if (req.url.indexOf('store/eapi/activity/signs') >= 0) {
             return await super.check(uid, req, res);
         }
     }

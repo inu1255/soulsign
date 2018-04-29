@@ -20,7 +20,7 @@ exports.proxy = async function(uid, domain, check) {
         if (v && v.time + 300e3 > new Date().getTime()) continue;
         item.domains[domain] = { check, time: new Date().getTime() };
         console.log("update proxy domain", item.port, domain);
-        await db.insertOrUpdate("uport", { uid, domain, port }).where({ domain, port });
+        await db.insertOrUpdate("uport", { uid, domain, port: item.port }).where({ domain, port: item.port });
         return item.port;
     }
     let item = noginx.express();
