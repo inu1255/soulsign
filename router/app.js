@@ -54,40 +54,54 @@ exports.set = function(req, res) {
 };
 
 function taskLoop() {
+    taskLoop.running = taskLoop.running || {};
     if (store.taskLoop != taskLoop) return;
-    let sql = `select * from up where enable=1 and online>0 and floor(success_at/86400000)<? limit 50`;
-    return db.execSQL(sql, [Math.floor(new Date().getTime() / 86400e3)], true).then(rows => Promise.all(rows.map(x => {
+    let ids = Object.keys(taskLoop.running);
+    let sql = `select * from up where enable=1 and online>0 and floor(success_at/86400000)<? ${ids.length?'and id not in (?)':''} limit 50`;
+    return db.execSQL(sql, [Math.floor(new Date().getTime() / 86400e3), ids], true).then(rows => Promise.all(rows.map(x => {
+        taskLoop.running[x.id] = true;
         /** @type {App} */
         let app = apps[x.aid];
         if (!app) return null;
-        return app.start(x.uid, JSON.parse(x.params));
-    }))).then(x => setTimeout(taskLoop, x.filter(x => x).length ? 0 : 5e3), err => {
+        return app.start(x.uid, JSON.parse(x.params)).then(y => {
+            delete taskLoop.running[x.id];
+            return y;
+        }, e => {
+            delete taskLoop.running[x.id];
+            return Promise.reject(e);
+        });
+    }))).then(x => setTimeout(taskLoop, x.filter(x => x).length ? 30e3 : 90e3), err => {
         console.log(err);
-        setTimeout(taskLoop, 0);
+        setTimeout(taskLoop, 30e3);
     });
 }
 store.taskLoop = taskLoop;
 taskLoop();
 
 function loginLoop() {
+    loginLoop.running = loginLoop.running || {};
     if (store.loginLoop != loginLoop) return;
-    let sql = `select * from up where enable=1 and online>0 and login_at<? limit 50`;
-    return db.execSQL(sql, [new Date().getTime() - 600e3], true).then(rows => Promise.all(rows.map(x => {
+    let ids = Object.keys(loginLoop.running);
+    let sql = `select * from up where enable=1 and online>0 and login_at<? ${ids.length?'and id not in (?)':''} limit 50`;
+    return db.execSQL(sql, [new Date().getTime() - 600e3, ids], true).then(rows => Promise.all(rows.map(x => {
+        loginLoop.running[x.id] = true;
         /** @type {App} */
         let app = apps[x.aid];
         if (!app) return null;
         let params = JSON.parse(x.params);
         return app.is_online(params).then(ok => {
             let t = new Date().getTime();
+            delete loginLoop.running[x.id];
             if (ok) return db.update("up", { login_at: t, online_at: t, online: 5 }).where({ aid: x.aid, uid: x.uid });
             return db.update("up", { login_at: t, online: db.Raw("online-1") }).where({ aid: x.aid, uid: x.uid });
         }, e => {
+            delete loginLoop.running[x.id];
             let t = new Date().getTime();
             return db.update("up", { login_at: t, online: db.Raw("online-1") }).where({ aid: x.aid, uid: x.uid });
         });
-    }))).then(x => setTimeout(loginLoop, x.length ? 0 : 5e3), err => {
+    }))).then(x => setTimeout(loginLoop, x.length ? 60e3 : 120e3), err => {
         console.log(err);
-        setTimeout(loginLoop, 0);
+        setTimeout(loginLoop, 60e3);
     });
 }
 store.loginLoop = loginLoop;

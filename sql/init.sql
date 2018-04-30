@@ -39,6 +39,7 @@ create table if not exists file (
 );
 
 create table if not exists up (
+  id int unsigned auto_increment primary key,
   aid varchar(32) not null,
   uid int unsigned not null,
   enable int default 1,
@@ -51,7 +52,7 @@ create table if not exists up (
   success_at bigint default 0,
   failure_at bigint default 0,
   create_at timestamp default current_timestamp,
-  primary key(uid,aid)
+  unique key up_uid_aid_unique(uid,aid)
 );
 
 create table if not exists uport (
