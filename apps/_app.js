@@ -12,16 +12,16 @@ class App {
     }
     init() {
         this.title = this.constructor.name;
-		this.domain = "";
-		this.host = "";
+        this.domain = "";
+        this.host = "";
         this.url = "";
         this.params = "";
         this.desc = "";
     }
     info() {
         let info = { id: this.id, title: this.title };
-		if (this.domain) info.domain = this.domain;
-		if (this.host) info.host = this.host;
+        if (this.domain) info.domain = this.domain;
+        if (this.host) info.host = this.host;
         if (this.package) info.package = this.package;
         if (this.url) info.url = this.url;
         if (this.params) info.params = this.params;
@@ -96,11 +96,11 @@ class App {
             return false;
         }).then(ok => {
             let t = new Date().getTime();
-            if (ok) return db.update("up", { update_at: t, success_at: t, num: db.Raw("num+1"), online: 5 }).where({ aid: this.id, uid: uid }).then(() => ok);
-            return db.update("up", { update_at: t, failure_at: t, online: db.Raw("online-2") }).where({ aid: this.id, uid: uid }).then(() => false);
+            if (ok) return db.update("up", { update_at: t, success_at: t, num: db.Raw("num+1"), online: 5 }).where({ uid: uid, aid: this.id }).then(() => ok);
+            return db.update("up", { update_at: t, failure_at: t, online: db.Raw("online-2") }).where({ uid: uid, aid: this.id }).then(() => false);
         }, err => {
             let t = new Date().getTime();
-            return db.update("up", { update_at: t, failure_at: t, online: db.Raw("online-2") }).where({ aid: this.id, uid: uid }).then(() => false);
+            return db.update("up", { update_at: t, failure_at: t, online: db.Raw("online-2") }).where({ uid: uid, aid: this.id }).then(() => false);
         });
     }
 }
