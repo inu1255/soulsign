@@ -27,7 +27,7 @@ exports.proxy = async function(req, res) {
     let app = apps[body.aid];
     if (!app) return 404;
     if (!app.domain) return 405;
-    let port = await proxy.proxy(user.id, app.domain, app.check.bind(app, user.id));
+    let port = await proxy.proxy(user.id, app.host || app.domain, app.check.bind(app, user.id));
     await db.update("up", { enable: false }).where({ aid: body.aid, uid: user.id });
     return { port };
 };
