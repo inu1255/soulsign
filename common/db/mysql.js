@@ -44,7 +44,13 @@ function extendsConn(coMysql, logger) {
         if (autoTrans)
             tasks.push(() => db.beginTransactionAsync());
         tasks.push(() => new Promise((resolve, reject) => {
-            utils.flow(utils.arr(sqls).map(sql => () => db.SingleSQL(sql, args, ignore))).then(resolve).catch(err => {
+            utils.flow(utils.arr(sqls).map(sql => () => db.SingleSQL(sql, args, ignore))).then(rows => {
+                if (autoTrans) {
+                    db.commitAsync().then(() => resolve(rows), reject);
+                } else {
+                    resolve(rows);
+                }
+            }).catch(err => {
                 if (autoTrans) {
                     db.rollbackAsync().then(() => reject(err)).catch(() => reject(err));
                 } else {

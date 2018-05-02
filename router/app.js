@@ -92,12 +92,12 @@ function loginLoop() {
         return app.is_online(params).then(ok => {
             let t = new Date().getTime();
             delete loginLoop.running[x.id];
-            if (ok) return db.update("up", { login_at: t, online_at: t, online: 5 }).where({ aid: x.aid, uid: x.uid });
-            return db.update("up", { login_at: t, online: db.Raw("online-1") }).where({ aid: x.aid, uid: x.uid });
+            if (ok) return db.update("up", { login_at: t, online_at: t, online: 5 }).where({ id: x.id });
+            return db.update("up", { login_at: t, online: db.Raw("online-1") }).where({ id: x.id });
         }, e => {
             delete loginLoop.running[x.id];
             let t = new Date().getTime();
-            return db.update("up", { login_at: t, online: db.Raw("online-1") }).where({ aid: x.aid, uid: x.uid });
+            return db.update("up", { login_at: t, online: db.Raw("online-1") }).where({ id: x.id });
         });
     }))).then(x => setTimeout(loginLoop, x.length ? 60e3 : 120e3), err => {
         console.log(err);
